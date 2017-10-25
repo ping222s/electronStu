@@ -40,6 +40,9 @@ function createWindow () {
 
     mainWindow.once('ready-to-show', function() {
         mainWindow.show()
+
+        //主进程发送消息给渲染进程
+        mainWindow.webContents.send('main-process-messages', 'main-process-messages show')
     })
 }
 
@@ -60,6 +63,7 @@ app.on('window-all-closed', function () {
 })
 
 app.on('activate', function () {
+
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
@@ -73,4 +77,9 @@ app.on('activate', function () {
 ipcMain.on('MainMsgFromRender',function (event, arg) {
     console.log(arg)
     event.sender.send('RenderMsgFromMain',arg)
+})
+
+ipcMain.on('mainSendMessage',function (event, arg) {
+    //主进程发送消息给渲染进程
+    mainWindow.webContents.send('main-process-messages', 'main-process-messages show')
 })

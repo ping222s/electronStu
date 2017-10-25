@@ -6,6 +6,9 @@
     <script src="jquery.js"></script>
     <script>
 
+        const electron = require('electron')
+        const ipcRenderer = electron.ipcRenderer
+
         function getUrlParam(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)")
             var r = window.location.search.substr(1).match(reg)
@@ -20,6 +23,15 @@
             var xx = getUrlParam('parm')
             alert(xx)
         }
+        
+        function mainSendMessage() {
+            //向主进程发送消息
+            ipcRenderer.send('mainSendMessage','')
+        }
+
+        ipcRenderer.on('main-process-messages', function(event, message){
+            alert(message)
+        })
 
     </script>
 </head>
@@ -31,6 +43,8 @@
     <br>
     <br>
     <button onclick="getParam()">获取参数</button>
+    <br>
+    <button onclick="mainSendMessage()">触发主线程发送msg</button>
 
 </div>
 

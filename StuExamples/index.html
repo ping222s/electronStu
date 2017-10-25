@@ -5,8 +5,9 @@
     <title>Electron practise</title>
     <script src="jquery.js"></script>
     <script>
+        const electron = require('electron')
+        const ipcRenderer = electron.ipcRenderer
 
-        var ipcRenderer = require('electron').ipcRenderer
         function sendTypeOne() {
             //向主进程发送消息
             ipcRenderer.send('MainMsgFromRender','hahaha')
@@ -17,9 +18,14 @@
             alert(arg)
         })
 
-        var remote = require('electron').remote
+        // 设置监听
+        ipcRenderer.on('main-process-messages', function(event, message){
+            alert(message)
+        })
+
+        const remote = require('electron').remote
         function sendTypeTwo() {
-            alert(remote.app.getVersion())
+            //alert(remote.app.getVersion())
             alert(remote.getGlobal('sharedObject').newTel)
         }
 
